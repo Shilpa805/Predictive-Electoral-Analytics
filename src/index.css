@@ -1,0 +1,366 @@
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Inter:wght@400;600;800&display=swap');
+
+:root {
+  --bg-color: #050508;
+  --panel-bg: rgba(10, 15, 25, 0.7);
+  --border-color: #1a2a40;
+  --neon-blue: #00f3ff;
+  --neon-cyan: #0ff;
+  --neon-yellow: #ffee00;
+  --neon-red: #ff003c;
+  --text-main: #e0fbfc;
+  --text-muted: #5c7b99;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body, html {
+  height: 100%;
+  width: 100%;
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  font-family: 'Inter', sans-serif;
+  overflow: hidden;
+}
+
+#root {
+  height: 100%;
+}
+
+/* App Layout */
+.app-container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+}
+
+/* Map Secion */
+.map-section {
+  flex: 1;
+  position: relative;
+}
+
+.map-wrapper {
+  height: 100%;
+  width: 100%;
+  position: relative;
+}
+
+/* Cyber grid overlay on map */
+.map-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 400; /* over map, under popups */
+  background: 
+    linear-gradient(rgba(0, 243, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 243, 255, 0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
+  box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.9);
+}
+
+/* Leaflet Overrides */
+.leaflet-container {
+  background: #000;
+}
+.leaflet-popup-content-wrapper {
+  background: rgba(5, 10, 15, 0.9) !important;
+  border: 1px solid var(--neon-blue);
+  border-radius: 0 !important;
+  color: var(--text-main) !important;
+  box-shadow: 0 0 15px rgba(0, 243, 255, 0.3);
+  backdrop-filter: blur(4px);
+  font-family: 'Share Tech Mono', monospace;
+}
+.leaflet-popup-tip {
+  background: var(--neon-blue) !important;
+}
+
+.cyber-popup .popup-content {
+  font-size: 13px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.cyber-popup .header {
+  color: var(--neon-blue);
+  font-weight: bold;
+  border-bottom: 1px solid var(--neon-blue);
+  padding-bottom: 4px;
+  margin-bottom: 4px;
+}
+.cyber-popup .row {
+  display: flex;
+  justify-content: space-between;
+}
+.cyber-popup span:first-child {
+  color: var(--text-muted);
+}
+.cyber-popup .verified { color: var(--neon-cyan); }
+.cyber-popup .estimated { color: var(--neon-yellow); animation: flicker 1s infinite; }
+
+/* Custom Nodes */
+.custom-node-icon {
+  background: transparent;
+  border: none;
+}
+
+.node-marker {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.node-marker .core {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  z-index: 2;
+  box-shadow: 0 0 10px currentColor;
+}
+
+.node-marker .ring {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 2px solid currentColor;
+  animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+.node-marker.verified {
+  color: var(--neon-cyan);
+}
+.node-marker.estimated {
+  color: var(--neon-yellow);
+}
+.node-marker.estimated .ring {
+  border-style: dashed;
+  animation: ping-fast 1s infinite, jitter 0.2s infinite;
+}
+
+.label-tag {
+  position: absolute;
+  top: -20px;
+  font-size: 10px;
+  font-family: 'Share Tech Mono', monospace;
+  background: rgba(0,0,0,0.8);
+  padding: 2px 4px;
+  border: 1px solid currentColor;
+}
+
+@keyframes ping {
+  75%, 100% { transform: scale(3); opacity: 0; }
+}
+@keyframes ping-fast {
+  75%, 100% { transform: scale(2); opacity: 0; }
+}
+@keyframes jitter {
+  0% { transform: translate(0,0); }
+  25% { transform: translate(1px, -1px); }
+  50% { transform: translate(-1px, 1px); }
+  75% { transform: translate(-1px, -1px); }
+  100% { transform: translate(0,0); }
+}
+
+/* Telemetry Dashboard */
+.telemetry-panel {
+  width: 400px;
+  background: var(--panel-bg);
+  backdrop-filter: blur(10px);
+  border-right: 1px solid var(--border-color);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  box-shadow: 5px 0 30px rgba(0,0,0,0.5);
+  font-family: 'Share Tech Mono', monospace;
+  z-index: 500;
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid var(--neon-blue);
+  padding-bottom: 10px;
+}
+.panel-header h2 {
+  font-size: 1.2rem;
+  color: var(--neon-blue);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
+}
+
+.icon { width: 20px; height: 20px; }
+.icon.small { width: 14px; height: 14px; }
+.pulse { animation: opacity-pulse 1.5s infinite; }
+
+.status-badge.live {
+  background: rgba(0, 255, 0, 0.1);
+  color: #0f0;
+  border: 1px solid #0f0;
+  padding: 2px 8px;
+  font-size: 0.8rem;
+  border-radius: 4px;
+  box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+}
+
+/* Metrics */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+}
+.metric-box {
+  background: rgba(0,0,0,0.4);
+  border: 1px solid var(--border-color);
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 4px;
+}
+.metric-box.warning-box {
+  border-color: rgba(255, 238, 0, 0.4);
+}
+.metric-box .label {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+.metric-box .value {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+.text-cyan { color: var(--neon-cyan); text-shadow: 0 0 10px rgba(0, 255, 255, 0.5); }
+.text-yellow { color: var(--neon-yellow); text-shadow: 0 0 10px rgba(255, 238, 0, 0.5); }
+
+/* Node List */
+.node-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+.node-list h3 {
+  font-size: 1rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.node-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background: rgba(0,0,0,0.4);
+  border-left: 3px solid transparent;
+}
+.node-item.verified {
+  border-left-color: var(--neon-cyan);
+}
+.node-item.estimated {
+  border-left-color: var(--neon-yellow);
+  background: rgba(255, 238, 0, 0.05);
+}
+
+.node-info {
+  display: flex;
+  flex-direction: column;
+}
+.node-name { font-weight: bold; }
+.coords { font-size: 0.75rem; color: var(--text-muted); }
+
+.node-status {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.8rem;
+}
+.node-item.verified .node-status { color: var(--neon-cyan); }
+.node-item.estimated .node-status { color: var(--neon-yellow); }
+
+/* Terminal Feed */
+.terminal-feed {
+  height: 250px;
+  background: #000;
+  border: 1px solid #111;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+.terminal-feed::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(255,255,255,0.05) 2px, transparent 3px);
+  pointer-events: none;
+}
+.terminal-feed h3 {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  border-bottom: 1px dashed var(--text-muted);
+  padding-bottom: 5px;
+}
+
+.log-container {
+  overflow-y: auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.log-container::-webkit-scrollbar { width: 4px;}
+.log-container::-webkit-scrollbar-thumb { background: var(--border-color); }
+
+.log-line {
+  font-size: 0.7rem;
+  display: flex;
+  gap: 8px;
+  word-break: break-all;
+}
+.log-line .timestamp { color: #555; }
+.log-line.success .code { color: #0a0; }
+.log-line.error .code { color: #a00; }
+.log-line .err-tag {
+  color: var(--neon-yellow);
+  background: rgba(255, 238, 0, 0.1);
+  padding: 0 4px;
+  margin-left: max(auto, 10px);
+}
+
+@keyframes opacity-pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.3; }
+  100% { opacity: 1; }
+}
+
+@keyframes flicker {
+  0%, 19.999%, 22%, 62.999%, 64%, 64.999%, 70%, 100% {
+    opacity: 0.99;
+  }
+  20%, 21.999%, 63%, 63.999%, 65%, 69.999% {
+    opacity: 0.4;
+  }
+}
+.glitch { animation: flicker 2s infinite; }
