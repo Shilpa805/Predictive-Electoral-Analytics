@@ -52,7 +52,7 @@ export default function TelemetryDashboard({ nodes, rawDataLog }) {
              <div key={i} className={`log-line ${log.isFragmented ? 'error' : 'success'}`}>
                <span className="timestamp">[{new Date().toLocaleTimeString()}]</span>
                <span className="code">{log.rawString}</span>
-               {log.isFragmented && <span className="err-tag">PARSE_ERR -> EXTRAPOLATING</span>}
+               {log.isFragmented && <span className="err-tag">PARSE_ERR ➜ EXTRAPOLATING</span>}
              </div>
           ))}
         </div>
